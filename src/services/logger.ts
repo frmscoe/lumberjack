@@ -29,4 +29,16 @@ stream.on('error', (error) => {
   console.log('error', error);
 });
 
-export const logger = pino({ level: 'trace', ...ecsOpts }, stream);
+export const logger = pino(
+  pino.multistream(
+    [
+      {
+        stream: process.stdout,
+        level: 'trace',
+        ...ecsOpts
+      },
+      stream
+
+    ]
+  )
+);
